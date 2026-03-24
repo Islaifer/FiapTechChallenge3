@@ -1,0 +1,322 @@
+<header class="ml-20">
+    @if(alreadyAnalysis){
+        <h1>Dashboard</h1>
+    }@else {
+        <h1>Dashboard (Ainda não foi realizada a análise)</h1>
+    }
+</header>
+
+<main class="ml-20 container">
+    <div class = "charts">
+        <mat-card class="chart-card" appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>Gráfico de relação de features para modelo de classificação</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                @if(alreadyAnalysis){
+                    <img class="chart" src="http://localhost:8000/plots/classifier_shap.png">
+                }
+            </mat-card-content>
+        </mat-card>
+    
+        <mat-card class="chart-card" appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>Gráfico de clusterização de rotas caóticas e menos caóticas</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                @if(alreadyAnalysis){
+                    <img class="chart" src="http://localhost:8000/plots/rote_cluster.png">
+                }
+            </mat-card-content>
+        </mat-card>
+    
+        <mat-card class="chart-card" appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>Gráfico de relação de features para modelo de regressão</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                @if(alreadyAnalysis){
+                    <img class="chart" src="http://localhost:8000/plots/regression_shap.png">
+                }
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <div class = "predicts">
+        <mat-card class="chart-card" appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>Prever se atrasará ou não</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <form [formGroup]="classifierFormGroup" (ngSubmit)="predictClassifier()">
+                    <div class="form-dialog-field-divideds">
+                        <mat-form-field class="w-50">
+                            <mat-label>Distancia</mat-label>
+                            <input matInput type="number" name="distance" formControlName="distance">
+                            @if(isInvalidFieldClassifier('distance')){
+                                <mat-error>Valor é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+
+                        <mat-form-field class="w-50">
+                            <mat-label>Desviado (1- Sim, 0- Não)</mat-label>
+                            <input matInput type="number" name="diverted" formControlName="diverted">
+                            @if(isInvalidFieldClassifier('diverted')){
+                                <mat-error>Valor é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                    <div class="form-dialog-field-divideds">
+                        <mat-form-field class="w-50">
+                            <mat-label>Mês</mat-label>
+                            <input matInput type="number" name="month" formControlName="month">
+                            @if(isInvalidFieldClassifier('month')){
+                                <mat-error>Valor é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+    
+                        <mat-form-field class="w-50">
+                            <mat-label>Dia</mat-label>
+                            <input matInput type="number" name="day" formControlName="day">
+                            @if(isInvalidFieldClassifier('day')){
+                                <mat-error>Valor é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-dialog-field-divideds">
+                        <mat-form-field class="w-50">
+                            <mat-label>Dia da Semana</mat-label>
+                            <input matInput type="number" name="day_of_week" formControlName="day_of_week">
+                            @if(isInvalidFieldClassifier('day_of_week')){
+                                <mat-error>Valor é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+    
+                        <mat-form-field class="w-50">
+                            <mat-label>Hora marcada do Voo (em numérico)</mat-label>
+                            <input matInput type="number" name="scheduled_departure_hour" formControlName="scheduled_departure_hour">
+                            @if(isInvalidFieldClassifier('scheduled_departure_hour')){
+                                <mat-error>Valor é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-dialog-field-divideds">
+                        <mat-form-field class="w-50">
+                            <mat-label>Aeroporto de Origem</mat-label>
+                            <input matInput type="text" name="origin" formControlName="origin">
+                            @if(isInvalidFieldClassifier('origin')){
+                                <mat-error>Nome é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+    
+                        <mat-form-field class="w-50">
+                            <mat-label>Aeroporto de Destino</mat-label>
+                            <input matInput type="text" name="destination" formControlName="destination">
+                            @if(isInvalidFieldClassifier('destination')){
+                                <mat-error>Nome é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-dialog-field-divideds">
+                        <mat-form-field class="w-100">
+                            <mat-label>Companhia Aérea</mat-label>
+                            <input matInput type="text" name="airline" formControlName="airline">
+                            @if(isInvalidFieldClassifier('airline')){
+                                <mat-error>Nome é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+
+                    <div>
+                        @if(classifierResult == 0){
+                            <p>Este voo não atrasará</p>
+                        }@else if (classifierResult == 1) {
+                            <p>Este voo atrasará</p>
+                        }
+                    </div>
+                
+                    <div class="form-buttons">
+                        <button matButton="filled" type="submit">
+                            <mat-icon>add</mat-icon>
+                            Prever
+                        </button>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    
+        <mat-card class="chart-card" appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>Métricas dos modelos</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div>
+                    <h3>Métricas do Modelo de Classificação</h3>
+                    <p><strong>Acuraccy: </strong>{{metrics.accuracy}}</p>
+                    <p><strong>Precision: </strong>{{metrics.precision}}</p>
+                    <p><strong>Recall: </strong>{{metrics.recall}}</p>
+                    <p><strong>F1: </strong>{{metrics.f1}}</p>
+                    <h3>Métricas do Modelo de Regressão</h3>
+                    <p><strong>RMSE: </strong>{{metrics.rmse}}</p>
+                    <p><strong>MAE: </strong>{{metrics.mae}}</p>
+                    <h3>Métricas do Modelo de Clusterização</h3>
+                    <p><strong>Silhouette: </strong>{{metrics.silhouette}}</p>
+                </div>
+            </mat-card-content>
+            <mat-card-actions>
+                <button matButton (click)="analysis()">Gerar Análise</button>
+            </mat-card-actions>
+        </mat-card>
+    
+        <mat-card class="chart-card" appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>Prever quanto tempo durará o atraso</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <form [formGroup]="regressionFormGroup" (ngSubmit)="predictRegression()">
+                    <div class="form-dialog-field-divideds">
+                        <mat-form-field class="w-50">
+                            <mat-label>Distancia</mat-label>
+                            <input matInput type="number" name="distance" formControlName="distance">
+                            @if(isInvalidFieldRegression('distance')){
+                                <mat-error>Valor é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+
+                        <mat-form-field class="w-50">
+                            <mat-label>Desviado (1- Sim, 0- Não)</mat-label>
+                            <input matInput type="number" name="diverted" formControlName="diverted">
+                            @if(isInvalidFieldRegression('diverted')){
+                                <mat-error>Valor é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                    <div class="form-dialog-field-divideds">
+                        <mat-form-field class="w-50">
+                            <mat-label>Mês</mat-label>
+                            <input matInput type="number" name="month" formControlName="month">
+                            @if(isInvalidFieldRegression('month')){
+                                <mat-error>Valor é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+    
+                        <mat-form-field class="w-50">
+                            <mat-label>Dia</mat-label>
+                            <input matInput type="number" name="day" formControlName="day">
+                            @if(isInvalidFieldRegression('day')){
+                                <mat-error>Valor é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-dialog-field-divideds">
+                        <mat-form-field class="w-50">
+                            <mat-label>Dia da Semana</mat-label>
+                            <input matInput type="number" name="day_of_week" formControlName="day_of_week">
+                            @if(isInvalidFieldRegression('day_of_week')){
+                                <mat-error>Valor é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+    
+                        <mat-form-field class="w-50">
+                            <mat-label>Hora marcada do Voo (em numérico)</mat-label>
+                            <input matInput type="number" name="scheduled_departure_hour" formControlName="scheduled_departure_hour">
+                            @if(isInvalidFieldRegression('scheduled_departure_hour')){
+                                <mat-error>Valor é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-dialog-field-divideds">
+                        <mat-form-field class="w-50">
+                            <mat-label>Aeroporto de Origem</mat-label>
+                            <input matInput type="text" name="origin" formControlName="origin">
+                            @if(isInvalidFieldRegression('origin')){
+                                <mat-error>Nome é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+    
+                        <mat-form-field class="w-50">
+                            <mat-label>Aeroporto de Destino</mat-label>
+                            <input matInput type="text" name="destination" formControlName="destination">
+                            @if(isInvalidFieldRegression('destination')){
+                                <mat-error>Nome é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-dialog-field-divideds">
+                        <mat-form-field class="w-50">
+                            <mat-label>Companhia Aérea</mat-label>
+                            <input matInput type="text" name="airline" formControlName="airline">
+                            @if(isInvalidFieldRegression('airline')){
+                                <mat-error>Nome é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+
+                        <mat-form-field class="w-50">
+                            <mat-label>Atraso por conta de Clima (1- Sim, 0- Não)</mat-label>
+                            <input matInput type="number" name="has_weather_delay" formControlName="has_weather_delay">
+                            @if(isInvalidFieldRegression('has_weather_delay')){
+                                <mat-error>Valor é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-dialog-field-divideds">
+                        <mat-form-field class="w-50">
+                            <mat-label>Atraso por conta da Companhia (1- Sim, 0- Não)</mat-label>
+                            <input matInput type="number" name="has_airline_delay" formControlName="has_airline_delay">
+                            @if(isInvalidFieldRegression('has_airline_delay')){
+                                <mat-error>Valor é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+    
+                        <mat-form-field class="w-50">
+                            <mat-label>Atraso por conta do sistema aéreo (1- Sim, 0- Não)</mat-label>
+                            <input matInput type="number" name="has_air_system_delay" formControlName="has_air_system_delay">
+                            @if(isInvalidFieldRegression('has_air_system_delay')){
+                                <mat-error>Valor é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-dialog-field-divideds">
+                        <mat-form-field class="w-50">
+                            <mat-label>Atraso por conta de Segurança (1- Sim, 0- Não)</mat-label>
+                            <input matInput type="number" name="has_security_delay" formControlName="has_security_delay">
+                            @if(isInvalidFieldRegression('has_security_delay')){
+                                <mat-error>Valor é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+    
+                        <mat-form-field class="w-50">
+                            <mat-label>Atraso por conta da Aeronave (1- Sim, 0- Não)</mat-label>
+                            <input matInput type="number" name="has_late_aircraft_delay" formControlName="has_late_aircraft_delay">
+                            @if(isInvalidFieldRegression('has_late_aircraft_delay')){
+                                <mat-error>Valor é obrigatório</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+
+                    <div>
+                        @if(resultRegression != 0){
+                            <p>Este voo não atrasará cerca de {{resultRegression}} minutos</p>
+                        }
+                    </div>
+
+                    <div class="form-buttons">
+                        <button matButton="filled" type="submit">
+                            <mat-icon>add</mat-icon>
+                            Prever
+                        </button>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+</main>

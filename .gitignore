@@ -1,0 +1,99 @@
+# IDEs
+.idea/
+.vscode/
+*.code-workspace
+
+# SO
+.DS_Store
+Thumbs.db
+
+# Java
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven
+.mvn/
+**/target/
+
+# Gradle
+.gradle/
+build/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+dist/
+.env
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.egg-info/
+.eggs/
+*.env
+
+# Logs
+*.log
+logs/
+**/*.log
+
+# Backup files
+*~
+*.bak
+*.tmp
+*.swp
+*.swo
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+docker-compose.override.yml
+
+# OS junk
+ehthumbs.db
+Desktop.ini
+
+# Others
+coverage/
+build/
+tmp/
+out/
+.cache/
+*.iml
+*.ipr
+*.iws
+*.orig
+*.rej
+
+# Git
+*.patch
+*.diff
+*.orig
+*.sublime-workspace
+*.sublime-project
+*.db
+
+# Optional: Ignore any .env and config secrets
+*.env
+.env.*
+secrets.yml
+config/secrets.yml
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+venv/
+.env/
+.env.*

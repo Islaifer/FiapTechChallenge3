@@ -1,0 +1,13 @@
+.container{
+    padding: 50px;
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    height: 90vh;
+}
+
+.chart {
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+}
